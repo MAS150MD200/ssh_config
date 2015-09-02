@@ -1,0 +1,22 @@
+ForwardAgent yes
+ServerAliveInterval 60
+ServerAliveCountMax 30
+StrictHostKeyChecking no
+UserKnownHostsFile /dev/null
+GSSAPIAuthentication no
+
+
+Host abs
+User atsvetkov
+IdentityFile ~/.ssh/id_rsa_atsvetkov
+#User root
+#IdentityFile ~/.ssh/id_rsa_us0101ats001_root.pub
+HostName us0101abs001.tango.me
+
+Host eabs
+HostName us0602abs001.tangome.gbl
+
+Host !us0101abs* us0101* us0701* eabs
+#User atsvetkov
+User root
+ProxyCommand ssh -W %h:%p -i ~/.ssh/id_rsa_us0101ats001_root.pub abs
