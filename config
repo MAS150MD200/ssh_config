@@ -1,22 +1,55 @@
+# USAGE:
+# su - atsvetkov
+# ssh-agent $SHEL
+# ssh-add ~/.ssh/id_rsa_atsvetkov
+# ssh-add ~/.ssh/id_rsa_us0101abs001_root 
+# ssh-add ~/.ssh/id_rsa_us0101ats001_root 
+
+
+# TIPS:
+# если использует ssh-agent, то IdentityFile можно не указывать.
+
+
+
+
 ForwardAgent yes
 ServerAliveInterval 60
 ServerAliveCountMax 30
 StrictHostKeyChecking no
 UserKnownHostsFile /dev/null
 GSSAPIAuthentication no
+ControlMaster auto
+ControlPath ~/.ssh/mux-%r@%h:%p
+ControlPersist 3h
 
 
 Host abs
 User atsvetkov
-IdentityFile ~/.ssh/id_rsa_atsvetkov
-#User root
-#IdentityFile ~/.ssh/id_rsa_us0101ats001_root.pub
 HostName us0101abs001.tango.me
 
+
 Host eabs
+User atsvetkov
 HostName us0602abs001.tangome.gbl
 
+
 Host !us0101abs* us0101* us0701* eabs
-#User atsvetkov
+# User atsvetkov
 User root
-ProxyCommand ssh -W %h:%p -i ~/.ssh/id_rsa_us0101ats001_root.pub abs
+ProxyCommand ssh -W %h:%p abs
+
+
+Host etool
+# HostName us0601ats001
+HostName 172.16.65.21
+
+
+Host elog
+# HostName us0602ald001.tangome.gbl
+# HostName us0602ald002.tangome.gbl
+HostName 172.16.66.20
+
+
+Host !eabs us0602* 172.16.*
+User atsvetkov
+ProxyCommand ssh -W %h:%p eabs
